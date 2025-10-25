@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Register Form</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      font-family: 'Poppins', sans-serif;
+    }
+    .login-box {
+      background: #fff;
+      padding: 40px 30px;
+      width: 350px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .login-box h2 {
+      margin-bottom: 25px;
+      color: #333;
+      font-weight: 600;
+    }
+    .input-box {
+      position: relative;
+      margin: 20px 0;
+    }
+    .input-box input {
+      width: 80%;
+      padding: 12px 40px 12px 15px;
+      border: none;
+      outline: none;
+      border-radius: 12px;
+      background: #f1f3f6;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+    .input-box input:focus {
+      background: #e0e7ff;
+      box-shadow: 0 0 8px #6e8efb;
+    }
+    .input-box span {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #6e8efb;
+      cursor: pointer;
+    }
+    .error-msg {
+      color: red;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+    .btn {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: linear-gradient(135deg, #5d7ffb, #9465e3);
+      transform: scale(1.05);
+    }
+    .login-box p {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+    .login-box a {
+      color: #6e8efb;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .login-box a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 400px) {
+      .login-box {
+        width: 90%;
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>Register</h2>
+    <form id="registerForm">
+      <div class="input-box">
+        <input id="username" type="text" placeholder="Username" required>
+        <div class="error-msg" id="usernameError">Username must be at least 3 characters</div>
+      </div>
+
+      <div class="input-box">
+        <input id="password" type="password" placeholder="Password" required>
+        <span id="togglePassword">👁️</span>
+        <div class="error-msg" id="passwordError">Password must be 6+ chars & include a number</div>
+      </div>
+
+      <div class="input-box">
+        <input id="confirmPassword" type="password" placeholder="Confirm Password" required>
+        <div class="error-msg" id="confirmError">Passwords do not match</div>
+      </div>
+
+      <button type="submit" class="btn">Register</button>
+      <p>Already have an account? <a href="lg.html">Login here</a></p>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('registerForm');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const confirmPasswordInput = document.getElementById('confirmPassword');
+      const togglePassword = document.getElementById('togglePassword');
+
+      const usernameError = document.getElementById('usernameError');
+      const passwordError = document.getElementById('passwordError');
+      const confirmError = document.getElementById('confirmError');
+
+      // Show/Hide Password
+      togglePassword.addEventListener('click', () => {
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        let valid = true;
+
+        // Username validation
+        if(usernameInput.value.length < 3){
+          usernameError.style.display = 'block';
+          valid = false;
+        } else {
+          usernameError.style.display = 'none';
+        }
+
+        // Password strength validation
+        const pwdRegex = /^(?=.*\d).{6,}$/;
+        if(!pwdRegex.test(passwordInput.value)){
+          passwordError.style.display = 'block';
+          valid = false;
+        } else {
+          passwordError.style.display = 'none';
+        }
+
+        // Password match
+        if(passwordInput.value !== confirmPasswordInput.value){
+          confirmError.style.display = 'block';
+          valid = false;
+        } else {
+          confirmError.style.display = 'none';
+        }
+
+        if(!valid) return;
+
+        // Save to localStorage (for demo only)
+        const userDetails = JSON.stringify({
+          username: usernameInput.value,
+          password: passwordInput.value
+        });
+        localStorage.setItem('registeredUser', userDetails);
+
+        alert(`Registration successful!`);
+        window.location.href = 'lg.html';
+      });
+    });
+  </script>
+
+</body>
+</html>
